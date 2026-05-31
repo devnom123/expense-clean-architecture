@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
 import { validate } from './config/env.validation';
+import { AuthModule } from './modules/auth/auth.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
-import { GlobalExceptionFilter } from './infrastructure/http/filters/global-exception.filter';
-import { TransformResponseInterceptor } from './infrastructure/http/interceptors/transform-response.interceptor';
 import { LoggingModule } from './infrastructure/logging/logging.module';
+import { PresentationModule } from './presentation/presentation.module';
 
 @Module({
   imports: [
@@ -19,6 +19,7 @@ import { LoggingModule } from './infrastructure/logging/logging.module';
       validate,
     }),
     LoggingModule,
+    PresentationModule,
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,18 +31,11 @@ import { LoggingModule } from './infrastructure/logging/logging.module';
       ],
     }),
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: TransformResponseInterceptor,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: GlobalExceptionFilter,
-    },
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

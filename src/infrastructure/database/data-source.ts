@@ -10,7 +10,9 @@ export default new DataSource({
   username: process.env.DB_USERNAME ?? 'wxpense',
   password: process.env.DB_PASSWORD ?? 'wxpense',
   database: process.env.DB_NAME ?? 'wxpense',
-  entities: ['src/infrastructure/persistence/entities/*.entity.ts'],
+  entities: [
+    'src/modules/**/infrastructure/persistence/entities/*.entity.ts',
+  ],
   migrations: ['src/infrastructure/database/migrations/*.ts'],
   synchronize: false,
 });

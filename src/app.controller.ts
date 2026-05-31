@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ResponseMessage } from './infrastructure/http/decorators/response-message.decorator';
+import { ResponseMessage } from './presentation/http/decorators/response-message.decorator';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 import { DataSource } from 'typeorm';

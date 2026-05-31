@@ -76,6 +76,14 @@ class EnvironmentVariables {
   @IsIn(LOG_LEVELS)
   @IsOptional()
   LOG_LEVEL?: string;
+
+  @IsString()
+  @IsOptional()
+  JWT_SECRET?: string;
+
+  @IsInt()
+  @IsOptional()
+  JWT_EXPIRES_IN_SECONDS?: number;
 }
 
 export function validate(config: Record<string, unknown>) {

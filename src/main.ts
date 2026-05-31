@@ -14,6 +14,8 @@ async function bootstrap() {
   const logger = app.get(Logger);
 
   app.use(helmet());
+
+  //this package is used to compress the response body
   app.use(compression());
 
   app.enableCors({
@@ -31,6 +33,8 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix('api');
+
+  //this is used to enable the shutdown hooks - shutdown hooks is used to gracefully shutdown the application
   app.enableShutdownHooks();
 
   const port = configService.get<number>('port') ?? 3000;

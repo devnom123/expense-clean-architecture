@@ -8,6 +8,8 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
+import { EmailAlreadyExistsException } from '../../../modules/auth/domain/exceptions/email-already-exists.exception';
+import { InvalidCredentialsException } from '../../../modules/auth/domain/exceptions/invalid-credentials.exception';
 import { ErrorApiResponse } from '../interfaces/api-response.interface';
 
 @Catch()
@@ -49,6 +51,22 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     message: string | string[];
     error: string;
   } {
+    if (exception instanceof EmailAlreadyExistsException) {
+      return {
+        statusCode: HttpStatus.CONFLICT,
+        message: exception.message,
+        error: 'Conflict',
+      };
+    }
+
+    if (exception instanceof InvalidCredentialsException) {
+      return {
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: exception.message,
+        error: 'Unauthorized',
+      };
+    }
+
     if (exception instanceof HttpException) {
       const statusCode = exception.getStatus();
       const exceptionResponse = exception.getResponse();
